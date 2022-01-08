@@ -6,5 +6,9 @@
     "esbuild": "^0.14.10",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "scripts": {
+    "build": "esbuild --bundle app/javascript/application.js --outfile=app/assets/javascripts/application.js",
+    "watch": "esbuild --watch --bundle app/javascript/application.js --outfile=app/assets/javascripts/application.js" 
   }
 }
