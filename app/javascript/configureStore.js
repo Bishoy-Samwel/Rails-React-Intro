@@ -1,10 +1,11 @@
 import { createStore } from 'redux';
 
-const initialState = { 
-  message: []
+const initialState = {
+  msg: { title: "Hello", body: "English Message" }
 };
 
-rootReducer = (state, action) => {
+rootReducer = (state = initialState, action) => {
+  console.log(action.type, "request");
   switch (action.type) {
     default:
       return state
