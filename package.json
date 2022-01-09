@@ -4,17 +4,20 @@
   "dependencies": {
     "@hotwired/turbo-rails": "^7.1.0",
     "esbuild": "^0.14.10",
-    "install": "^0.13.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "redux": "^4.1.2",
-    "reselect": "^4.1.5",
-    "yarn": "^1.22.17"
+    "reselect": "^4.1.5"
   },
   "scripts": {
     "build": "esbuild --bundle app/javascript/application.js --outfile=app/assets/javascripts/application.js",
     "watch": "esbuild --watch --bundle app/javascript/application.js --outfile=app/assets/javascripts/application.js"
+  },
+  "devDependencies": {
+    "install": "^0.13.0",
+    "redux-devtools-extension": "^2.13.9",
+    "yarn": "^1.22.17"
   }
 }
