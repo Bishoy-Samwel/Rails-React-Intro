@@ -2942,11 +2942,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React2 = require_react();
+          var React3 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React2.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React3.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn(format) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2978,7 +2978,7 @@
               Function.prototype.apply.call(console[level], console, argsWithFormat);
             }
           }
-          if (!React2) {
+          if (!React3) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -4194,7 +4194,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React2.Children.forEach(children, function(child) {
+            React3.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -4205,7 +4205,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React2.Children.forEach(props.children, function(child) {
+                React3.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -11398,7 +11398,7 @@
           }
           var fakeInternalInstance = {};
           var isArray = Array.isArray;
-          var emptyRefsObject = new React2.Component().refs;
+          var emptyRefsObject = new React3.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24150,18 +24150,24 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   customElements.define("turbo-cable-stream-source", TurboCableStreamSourceElement);
 
-  // app/javascript/components/clock.jsx
+  // app/javascript/components/App.jsx
+  var import_react2 = __toESM(require_react());
+  var import_react_dom2 = __toESM(require_react_dom());
+
+  // app/javascript/components/message.jsx
   var import_react = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
-  function Clock(props) {
-    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h1", null, "Hello, world!"), /* @__PURE__ */ import_react.default.createElement("h2", null, "It is ", props.date.toLocaleTimeString(), "."));
+  function Message(props) {
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("h2", null, "The Message is ", props.msg, "."));
   }
-  function tick() {
-    import_react_dom.default.render(/* @__PURE__ */ import_react.default.createElement(Clock, {
-      date: new Date()
-    }), document.getElementById("root"));
-  }
-  setInterval(tick, 1e3);
+
+  // app/javascript/components/App.jsx
+  var App = () => {
+    return /* @__PURE__ */ import_react2.default.createElement(Message, {
+      msg: "hi"
+    });
+  };
+  import_react_dom2.default.render(/* @__PURE__ */ import_react2.default.createElement(App, null), document.getElementById("root"));
 })();
 /*
 object-assign
