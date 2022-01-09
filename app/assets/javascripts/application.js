@@ -22063,6 +22063,463 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   });
 
+  // node_modules/@babel/runtime/helpers/defineProperty.js
+  var require_defineProperty = __commonJS({
+    "node_modules/@babel/runtime/helpers/defineProperty.js"(exports, module) {
+      function _defineProperty(obj, key, value) {
+        if (key in obj) {
+          Object.defineProperty(obj, key, {
+            value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+          });
+        } else {
+          obj[key] = value;
+        }
+        return obj;
+      }
+      module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+    }
+  });
+
+  // node_modules/@babel/runtime/helpers/objectSpread2.js
+  var require_objectSpread2 = __commonJS({
+    "node_modules/@babel/runtime/helpers/objectSpread2.js"(exports, module) {
+      var defineProperty = require_defineProperty();
+      function ownKeys(object, enumerableOnly) {
+        var keys = Object.keys(object);
+        if (Object.getOwnPropertySymbols) {
+          var symbols = Object.getOwnPropertySymbols(object);
+          enumerableOnly && (symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+          })), keys.push.apply(keys, symbols);
+        }
+        return keys;
+      }
+      function _objectSpread2(target) {
+        for (var i = 1; i < arguments.length; i++) {
+          var source = arguments[i] != null ? arguments[i] : {};
+          i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+            defineProperty(target, key, source[key]);
+          }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+          });
+        }
+        return target;
+      }
+      module.exports = _objectSpread2, module.exports.__esModule = true, module.exports["default"] = module.exports;
+    }
+  });
+
+  // node_modules/redux/lib/redux.js
+  var require_redux = __commonJS({
+    "node_modules/redux/lib/redux.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      var _objectSpread = require_objectSpread2();
+      function _interopDefaultLegacy(e) {
+        return e && typeof e === "object" && "default" in e ? e : { "default": e };
+      }
+      var _objectSpread__default = /* @__PURE__ */ _interopDefaultLegacy(_objectSpread);
+      var $$observable = function() {
+        return typeof Symbol === "function" && Symbol.observable || "@@observable";
+      }();
+      var randomString = function randomString2() {
+        return Math.random().toString(36).substring(7).split("").join(".");
+      };
+      var ActionTypes = {
+        INIT: "@@redux/INIT" + randomString(),
+        REPLACE: "@@redux/REPLACE" + randomString(),
+        PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
+          return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
+        }
+      };
+      function isPlainObject2(obj) {
+        if (typeof obj !== "object" || obj === null)
+          return false;
+        var proto = obj;
+        while (Object.getPrototypeOf(proto) !== null) {
+          proto = Object.getPrototypeOf(proto);
+        }
+        return Object.getPrototypeOf(obj) === proto;
+      }
+      function miniKindOf(val) {
+        if (val === void 0)
+          return "undefined";
+        if (val === null)
+          return "null";
+        var type = typeof val;
+        switch (type) {
+          case "boolean":
+          case "string":
+          case "number":
+          case "symbol":
+          case "function": {
+            return type;
+          }
+        }
+        if (Array.isArray(val))
+          return "array";
+        if (isDate(val))
+          return "date";
+        if (isError(val))
+          return "error";
+        var constructorName = ctorName(val);
+        switch (constructorName) {
+          case "Symbol":
+          case "Promise":
+          case "WeakMap":
+          case "WeakSet":
+          case "Map":
+          case "Set":
+            return constructorName;
+        }
+        return type.slice(8, -1).toLowerCase().replace(/\s/g, "");
+      }
+      function ctorName(val) {
+        return typeof val.constructor === "function" ? val.constructor.name : null;
+      }
+      function isError(val) {
+        return val instanceof Error || typeof val.message === "string" && val.constructor && typeof val.constructor.stackTraceLimit === "number";
+      }
+      function isDate(val) {
+        if (val instanceof Date)
+          return true;
+        return typeof val.toDateString === "function" && typeof val.getDate === "function" && typeof val.setDate === "function";
+      }
+      function kindOf(val) {
+        var typeOfVal = typeof val;
+        if (true) {
+          typeOfVal = miniKindOf(val);
+        }
+        return typeOfVal;
+      }
+      function createStore2(reducer, preloadedState, enhancer) {
+        var _ref2;
+        if (typeof preloadedState === "function" && typeof enhancer === "function" || typeof enhancer === "function" && typeof arguments[3] === "function") {
+          throw new Error(false ? formatProdErrorMessage(0) : "It looks like you are passing several store enhancers to createStore(). This is not supported. Instead, compose them together to a single function. See https://redux.js.org/tutorials/fundamentals/part-4-store#creating-a-store-with-enhancers for an example.");
+        }
+        if (typeof preloadedState === "function" && typeof enhancer === "undefined") {
+          enhancer = preloadedState;
+          preloadedState = void 0;
+        }
+        if (typeof enhancer !== "undefined") {
+          if (typeof enhancer !== "function") {
+            throw new Error(false ? formatProdErrorMessage(1) : "Expected the enhancer to be a function. Instead, received: '" + kindOf(enhancer) + "'");
+          }
+          return enhancer(createStore2)(reducer, preloadedState);
+        }
+        if (typeof reducer !== "function") {
+          throw new Error(false ? formatProdErrorMessage(2) : "Expected the root reducer to be a function. Instead, received: '" + kindOf(reducer) + "'");
+        }
+        var currentReducer = reducer;
+        var currentState = preloadedState;
+        var currentListeners = [];
+        var nextListeners = currentListeners;
+        var isDispatching = false;
+        function ensureCanMutateNextListeners() {
+          if (nextListeners === currentListeners) {
+            nextListeners = currentListeners.slice();
+          }
+        }
+        function getState() {
+          if (isDispatching) {
+            throw new Error(false ? formatProdErrorMessage(3) : "You may not call store.getState() while the reducer is executing. The reducer has already received the state as an argument. Pass it down from the top reducer instead of reading it from the store.");
+          }
+          return currentState;
+        }
+        function subscribe(listener) {
+          if (typeof listener !== "function") {
+            throw new Error(false ? formatProdErrorMessage(4) : "Expected the listener to be a function. Instead, received: '" + kindOf(listener) + "'");
+          }
+          if (isDispatching) {
+            throw new Error(false ? formatProdErrorMessage(5) : "You may not call store.subscribe() while the reducer is executing. If you would like to be notified after the store has been updated, subscribe from a component and invoke store.getState() in the callback to access the latest state. See https://redux.js.org/api/store#subscribelistener for more details.");
+          }
+          var isSubscribed = true;
+          ensureCanMutateNextListeners();
+          nextListeners.push(listener);
+          return function unsubscribe() {
+            if (!isSubscribed) {
+              return;
+            }
+            if (isDispatching) {
+              throw new Error(false ? formatProdErrorMessage(6) : "You may not unsubscribe from a store listener while the reducer is executing. See https://redux.js.org/api/store#subscribelistener for more details.");
+            }
+            isSubscribed = false;
+            ensureCanMutateNextListeners();
+            var index = nextListeners.indexOf(listener);
+            nextListeners.splice(index, 1);
+            currentListeners = null;
+          };
+        }
+        function dispatch2(action) {
+          if (!isPlainObject2(action)) {
+            throw new Error(false ? formatProdErrorMessage(7) : "Actions must be plain objects. Instead, the actual type was: '" + kindOf(action) + "'. You may need to add middleware to your store setup to handle dispatching other values, such as 'redux-thunk' to handle dispatching functions. See https://redux.js.org/tutorials/fundamentals/part-4-store#middleware and https://redux.js.org/tutorials/fundamentals/part-6-async-logic#using-the-redux-thunk-middleware for examples.");
+          }
+          if (typeof action.type === "undefined") {
+            throw new Error(false ? formatProdErrorMessage(8) : 'Actions may not have an undefined "type" property. You may have misspelled an action type string constant.');
+          }
+          if (isDispatching) {
+            throw new Error(false ? formatProdErrorMessage(9) : "Reducers may not dispatch actions.");
+          }
+          try {
+            isDispatching = true;
+            currentState = currentReducer(currentState, action);
+          } finally {
+            isDispatching = false;
+          }
+          var listeners = currentListeners = nextListeners;
+          for (var i = 0; i < listeners.length; i++) {
+            var listener = listeners[i];
+            listener();
+          }
+          return action;
+        }
+        function replaceReducer(nextReducer) {
+          if (typeof nextReducer !== "function") {
+            throw new Error(false ? formatProdErrorMessage(10) : "Expected the nextReducer to be a function. Instead, received: '" + kindOf(nextReducer));
+          }
+          currentReducer = nextReducer;
+          dispatch2({
+            type: ActionTypes.REPLACE
+          });
+        }
+        function observable() {
+          var _ref;
+          var outerSubscribe = subscribe;
+          return _ref = {
+            subscribe: function subscribe2(observer) {
+              if (typeof observer !== "object" || observer === null) {
+                throw new Error(false ? formatProdErrorMessage(11) : "Expected the observer to be an object. Instead, received: '" + kindOf(observer) + "'");
+              }
+              function observeState() {
+                if (observer.next) {
+                  observer.next(getState());
+                }
+              }
+              observeState();
+              var unsubscribe = outerSubscribe(observeState);
+              return {
+                unsubscribe
+              };
+            }
+          }, _ref[$$observable] = function() {
+            return this;
+          }, _ref;
+        }
+        dispatch2({
+          type: ActionTypes.INIT
+        });
+        return _ref2 = {
+          dispatch: dispatch2,
+          subscribe,
+          getState,
+          replaceReducer
+        }, _ref2[$$observable] = observable, _ref2;
+      }
+      function warning3(message) {
+        if (typeof console !== "undefined" && typeof console.error === "function") {
+          console.error(message);
+        }
+        try {
+          throw new Error(message);
+        } catch (e) {
+        }
+      }
+      function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+        var reducerKeys = Object.keys(reducers);
+        var argumentName = action && action.type === ActionTypes.INIT ? "preloadedState argument passed to createStore" : "previous state received by the reducer";
+        if (reducerKeys.length === 0) {
+          return "Store does not have a valid reducer. Make sure the argument passed to combineReducers is an object whose values are reducers.";
+        }
+        if (!isPlainObject2(inputState)) {
+          return "The " + argumentName + ' has unexpected type of "' + kindOf(inputState) + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+        }
+        var unexpectedKeys = Object.keys(inputState).filter(function(key) {
+          return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+        });
+        unexpectedKeys.forEach(function(key) {
+          unexpectedKeyCache[key] = true;
+        });
+        if (action && action.type === ActionTypes.REPLACE)
+          return;
+        if (unexpectedKeys.length > 0) {
+          return "Unexpected " + (unexpectedKeys.length > 1 ? "keys" : "key") + " " + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + ". ") + "Expected to find one of the known reducer keys instead: " + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+        }
+      }
+      function assertReducerShape(reducers) {
+        Object.keys(reducers).forEach(function(key) {
+          var reducer = reducers[key];
+          var initialState2 = reducer(void 0, {
+            type: ActionTypes.INIT
+          });
+          if (typeof initialState2 === "undefined") {
+            throw new Error(false ? formatProdErrorMessage(12) : 'The slice reducer for key "' + key + `" returned undefined during initialization. If the state passed to the reducer is undefined, you must explicitly return the initial state. The initial state may not be undefined. If you don't want to set a value for this reducer, you can use null instead of undefined.`);
+          }
+          if (typeof reducer(void 0, {
+            type: ActionTypes.PROBE_UNKNOWN_ACTION()
+          }) === "undefined") {
+            throw new Error(false ? formatProdErrorMessage(13) : 'The slice reducer for key "' + key + '" returned undefined when probed with a random type. ' + ("Don't try to handle '" + ActionTypes.INIT + `' or other actions in "redux/*" `) + "namespace. They are considered private. Instead, you must return the current state for any unknown actions, unless it is undefined, in which case you must return the initial state, regardless of the action type. The initial state may not be undefined, but can be null.");
+          }
+        });
+      }
+      function combineReducers(reducers) {
+        var reducerKeys = Object.keys(reducers);
+        var finalReducers = {};
+        for (var i = 0; i < reducerKeys.length; i++) {
+          var key = reducerKeys[i];
+          if (true) {
+            if (typeof reducers[key] === "undefined") {
+              warning3('No reducer provided for key "' + key + '"');
+            }
+          }
+          if (typeof reducers[key] === "function") {
+            finalReducers[key] = reducers[key];
+          }
+        }
+        var finalReducerKeys = Object.keys(finalReducers);
+        var unexpectedKeyCache;
+        if (true) {
+          unexpectedKeyCache = {};
+        }
+        var shapeAssertionError;
+        try {
+          assertReducerShape(finalReducers);
+        } catch (e) {
+          shapeAssertionError = e;
+        }
+        return function combination(state, action) {
+          if (state === void 0) {
+            state = {};
+          }
+          if (shapeAssertionError) {
+            throw shapeAssertionError;
+          }
+          if (true) {
+            var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+            if (warningMessage) {
+              warning3(warningMessage);
+            }
+          }
+          var hasChanged = false;
+          var nextState = {};
+          for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+            var _key = finalReducerKeys[_i];
+            var reducer = finalReducers[_key];
+            var previousStateForKey = state[_key];
+            var nextStateForKey = reducer(previousStateForKey, action);
+            if (typeof nextStateForKey === "undefined") {
+              var actionType = action && action.type;
+              throw new Error(false ? formatProdErrorMessage(14) : "When called with an action of type " + (actionType ? '"' + String(actionType) + '"' : "(unknown type)") + ', the slice reducer for key "' + _key + '" returned undefined. To ignore an action, you must explicitly return the previous state. If you want this reducer to hold no value, you can return null instead of undefined.');
+            }
+            nextState[_key] = nextStateForKey;
+            hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+          }
+          hasChanged = hasChanged || finalReducerKeys.length !== Object.keys(state).length;
+          return hasChanged ? nextState : state;
+        };
+      }
+      function bindActionCreator(actionCreator, dispatch2) {
+        return function() {
+          return dispatch2(actionCreator.apply(this, arguments));
+        };
+      }
+      function bindActionCreators2(actionCreators, dispatch2) {
+        if (typeof actionCreators === "function") {
+          return bindActionCreator(actionCreators, dispatch2);
+        }
+        if (typeof actionCreators !== "object" || actionCreators === null) {
+          throw new Error(false ? formatProdErrorMessage(16) : "bindActionCreators expected an object or a function, but instead received: '" + kindOf(actionCreators) + `'. Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`);
+        }
+        var boundActionCreators = {};
+        for (var key in actionCreators) {
+          var actionCreator = actionCreators[key];
+          if (typeof actionCreator === "function") {
+            boundActionCreators[key] = bindActionCreator(actionCreator, dispatch2);
+          }
+        }
+        return boundActionCreators;
+      }
+      function compose() {
+        for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+          funcs[_key] = arguments[_key];
+        }
+        if (funcs.length === 0) {
+          return function(arg) {
+            return arg;
+          };
+        }
+        if (funcs.length === 1) {
+          return funcs[0];
+        }
+        return funcs.reduce(function(a, b) {
+          return function() {
+            return a(b.apply(void 0, arguments));
+          };
+        });
+      }
+      function applyMiddleware2() {
+        for (var _len = arguments.length, middlewares = new Array(_len), _key = 0; _key < _len; _key++) {
+          middlewares[_key] = arguments[_key];
+        }
+        return function(createStore3) {
+          return function() {
+            var store2 = createStore3.apply(void 0, arguments);
+            var _dispatch = function dispatch2() {
+              throw new Error(false ? formatProdErrorMessage(15) : "Dispatching while constructing your middleware is not allowed. Other middleware would not be applied to this dispatch.");
+            };
+            var middlewareAPI = {
+              getState: store2.getState,
+              dispatch: function dispatch2() {
+                return _dispatch.apply(void 0, arguments);
+              }
+            };
+            var chain = middlewares.map(function(middleware) {
+              return middleware(middlewareAPI);
+            });
+            _dispatch = compose.apply(void 0, chain)(store2.dispatch);
+            return _objectSpread__default["default"](_objectSpread__default["default"]({}, store2), {}, {
+              dispatch: _dispatch
+            });
+          };
+        };
+      }
+      function isCrushed() {
+      }
+      if (typeof isCrushed.name === "string" && isCrushed.name !== "isCrushed") {
+        warning3('You are currently using minified code outside of NODE_ENV === "production". This means that you are running a slower development build of Redux. You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) to ensure you have the correct code for your production build.');
+      }
+      exports.__DO_NOT_USE__ActionTypes = ActionTypes;
+      exports.applyMiddleware = applyMiddleware2;
+      exports.bindActionCreators = bindActionCreators2;
+      exports.combineReducers = combineReducers;
+      exports.compose = compose;
+      exports.createStore = createStore2;
+    }
+  });
+
+  // node_modules/redux-devtools-extension/index.js
+  var require_redux_devtools_extension = __commonJS({
+    "node_modules/redux-devtools-extension/index.js"(exports) {
+      "use strict";
+      var compose = require_redux().compose;
+      exports.__esModule = true;
+      exports.composeWithDevTools = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : function() {
+        if (arguments.length === 0)
+          return void 0;
+        if (typeof arguments[0] === "object")
+          return compose;
+        return compose.apply(null, arguments);
+      };
+      exports.devToolsEnhancer = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ : function() {
+        return function(noop) {
+          return noop;
+        };
+      };
+    }
+  });
+
   // node_modules/@hotwired/turbo/dist/turbo.es2017-esm.js
   (function() {
     if (window.Reflect === void 0 || window.customElements === void 0 || window.customElements.polyfillWrapFlushCallback) {
@@ -26502,11 +26959,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   setBatch(import_react_dom.unstable_batchedUpdates);
 
   // app/javascript/components/message.jsx
-  var GET_RANDOM_MSG = "GET_RANDOM_MSG";
-  GetRandomMsg = () => {
+  var GET_RANDOM_MSG_REQUEST = "GET_RANDOM_MSG_REQUEST";
+  var GET_RANDOM_MSG_SUCCSESS = "GET_RANDOM_MSG_SUCCSESS";
+  getRandomMsg = () => {
+    return (dispacth) => {
+      dispacth({ type: GET_RANDOM_MSG_REQUEST });
+      return fetch(`api/v1/randomMessage`).then((response) => response.json()).then((json) => dispacth(getRandomMsgSuccess(json))).catch((error) => console.log(error));
+    };
+  };
+  getRandomMsgSuccess = (json) => {
     console.log("GetRandomMsg() Action");
     return {
-      type: GET_RANDOM_MSG
+      type: GET_RANDOM_MSG_SUCCSESS,
+      json
     };
   };
   function Message(props) {
@@ -26515,221 +26980,32 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const message = useSelector((state) => state.msg);
     return /* @__PURE__ */ import_react10.default.createElement("div", null, /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from props is ", msg, "."), /* @__PURE__ */ import_react10.default.createElement("button", {
       className: "getMessageBtn",
-      onClick: () => dispatch2(GetRandomMsg())
+      onClick: () => dispatch2(getRandomMsg())
     }, " Get Random Message"), /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from store is ", message.title, "."));
   }
 
-  // node_modules/redux/es/redux.js
-  var $$observable = function() {
-    return typeof Symbol === "function" && Symbol.observable || "@@observable";
-  }();
-  var randomString = function randomString2() {
-    return Math.random().toString(36).substring(7).split("").join(".");
-  };
-  var ActionTypes = {
-    INIT: "@@redux/INIT" + randomString(),
-    REPLACE: "@@redux/REPLACE" + randomString(),
-    PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
-      return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
-    }
-  };
-  function isPlainObject2(obj) {
-    if (typeof obj !== "object" || obj === null)
-      return false;
-    var proto = obj;
-    while (Object.getPrototypeOf(proto) !== null) {
-      proto = Object.getPrototypeOf(proto);
-    }
-    return Object.getPrototypeOf(obj) === proto;
-  }
-  function miniKindOf(val) {
-    if (val === void 0)
-      return "undefined";
-    if (val === null)
-      return "null";
-    var type = typeof val;
-    switch (type) {
-      case "boolean":
-      case "string":
-      case "number":
-      case "symbol":
-      case "function": {
-        return type;
-      }
-    }
-    if (Array.isArray(val))
-      return "array";
-    if (isDate(val))
-      return "date";
-    if (isError(val))
-      return "error";
-    var constructorName = ctorName(val);
-    switch (constructorName) {
-      case "Symbol":
-      case "Promise":
-      case "WeakMap":
-      case "WeakSet":
-      case "Map":
-      case "Set":
-        return constructorName;
-    }
-    return type.slice(8, -1).toLowerCase().replace(/\s/g, "");
-  }
-  function ctorName(val) {
-    return typeof val.constructor === "function" ? val.constructor.name : null;
-  }
-  function isError(val) {
-    return val instanceof Error || typeof val.message === "string" && val.constructor && typeof val.constructor.stackTraceLimit === "number";
-  }
-  function isDate(val) {
-    if (val instanceof Date)
-      return true;
-    return typeof val.toDateString === "function" && typeof val.getDate === "function" && typeof val.setDate === "function";
-  }
-  function kindOf(val) {
-    var typeOfVal = typeof val;
-    if (true) {
-      typeOfVal = miniKindOf(val);
-    }
-    return typeOfVal;
-  }
-  function createStore(reducer, preloadedState, enhancer) {
-    var _ref2;
-    if (typeof preloadedState === "function" && typeof enhancer === "function" || typeof enhancer === "function" && typeof arguments[3] === "function") {
-      throw new Error(false ? formatProdErrorMessage(0) : "It looks like you are passing several store enhancers to createStore(). This is not supported. Instead, compose them together to a single function. See https://redux.js.org/tutorials/fundamentals/part-4-store#creating-a-store-with-enhancers for an example.");
-    }
-    if (typeof preloadedState === "function" && typeof enhancer === "undefined") {
-      enhancer = preloadedState;
-      preloadedState = void 0;
-    }
-    if (typeof enhancer !== "undefined") {
-      if (typeof enhancer !== "function") {
-        throw new Error(false ? formatProdErrorMessage(1) : "Expected the enhancer to be a function. Instead, received: '" + kindOf(enhancer) + "'");
-      }
-      return enhancer(createStore)(reducer, preloadedState);
-    }
-    if (typeof reducer !== "function") {
-      throw new Error(false ? formatProdErrorMessage(2) : "Expected the root reducer to be a function. Instead, received: '" + kindOf(reducer) + "'");
-    }
-    var currentReducer = reducer;
-    var currentState = preloadedState;
-    var currentListeners = [];
-    var nextListeners = currentListeners;
-    var isDispatching = false;
-    function ensureCanMutateNextListeners() {
-      if (nextListeners === currentListeners) {
-        nextListeners = currentListeners.slice();
-      }
-    }
-    function getState() {
-      if (isDispatching) {
-        throw new Error(false ? formatProdErrorMessage(3) : "You may not call store.getState() while the reducer is executing. The reducer has already received the state as an argument. Pass it down from the top reducer instead of reading it from the store.");
-      }
-      return currentState;
-    }
-    function subscribe(listener) {
-      if (typeof listener !== "function") {
-        throw new Error(false ? formatProdErrorMessage(4) : "Expected the listener to be a function. Instead, received: '" + kindOf(listener) + "'");
-      }
-      if (isDispatching) {
-        throw new Error(false ? formatProdErrorMessage(5) : "You may not call store.subscribe() while the reducer is executing. If you would like to be notified after the store has been updated, subscribe from a component and invoke store.getState() in the callback to access the latest state. See https://redux.js.org/api/store#subscribelistener for more details.");
-      }
-      var isSubscribed = true;
-      ensureCanMutateNextListeners();
-      nextListeners.push(listener);
-      return function unsubscribe() {
-        if (!isSubscribed) {
-          return;
-        }
-        if (isDispatching) {
-          throw new Error(false ? formatProdErrorMessage(6) : "You may not unsubscribe from a store listener while the reducer is executing. See https://redux.js.org/api/store#subscribelistener for more details.");
-        }
-        isSubscribed = false;
-        ensureCanMutateNextListeners();
-        var index = nextListeners.indexOf(listener);
-        nextListeners.splice(index, 1);
-        currentListeners = null;
+  // app/javascript/configureStore.js
+  var import_redux = __toESM(require_redux());
+  var import_redux_devtools_extension = __toESM(require_redux_devtools_extension());
+
+  // node_modules/redux-thunk/es/index.js
+  function createThunkMiddleware(extraArgument) {
+    var middleware = function middleware2(_ref) {
+      var dispatch2 = _ref.dispatch, getState = _ref.getState;
+      return function(next) {
+        return function(action) {
+          if (typeof action === "function") {
+            return action(dispatch2, getState, extraArgument);
+          }
+          return next(action);
+        };
       };
-    }
-    function dispatch2(action) {
-      if (!isPlainObject2(action)) {
-        throw new Error(false ? formatProdErrorMessage(7) : "Actions must be plain objects. Instead, the actual type was: '" + kindOf(action) + "'. You may need to add middleware to your store setup to handle dispatching other values, such as 'redux-thunk' to handle dispatching functions. See https://redux.js.org/tutorials/fundamentals/part-4-store#middleware and https://redux.js.org/tutorials/fundamentals/part-6-async-logic#using-the-redux-thunk-middleware for examples.");
-      }
-      if (typeof action.type === "undefined") {
-        throw new Error(false ? formatProdErrorMessage(8) : 'Actions may not have an undefined "type" property. You may have misspelled an action type string constant.');
-      }
-      if (isDispatching) {
-        throw new Error(false ? formatProdErrorMessage(9) : "Reducers may not dispatch actions.");
-      }
-      try {
-        isDispatching = true;
-        currentState = currentReducer(currentState, action);
-      } finally {
-        isDispatching = false;
-      }
-      var listeners = currentListeners = nextListeners;
-      for (var i = 0; i < listeners.length; i++) {
-        var listener = listeners[i];
-        listener();
-      }
-      return action;
-    }
-    function replaceReducer(nextReducer) {
-      if (typeof nextReducer !== "function") {
-        throw new Error(false ? formatProdErrorMessage(10) : "Expected the nextReducer to be a function. Instead, received: '" + kindOf(nextReducer));
-      }
-      currentReducer = nextReducer;
-      dispatch2({
-        type: ActionTypes.REPLACE
-      });
-    }
-    function observable() {
-      var _ref;
-      var outerSubscribe = subscribe;
-      return _ref = {
-        subscribe: function subscribe2(observer) {
-          if (typeof observer !== "object" || observer === null) {
-            throw new Error(false ? formatProdErrorMessage(11) : "Expected the observer to be an object. Instead, received: '" + kindOf(observer) + "'");
-          }
-          function observeState() {
-            if (observer.next) {
-              observer.next(getState());
-            }
-          }
-          observeState();
-          var unsubscribe = outerSubscribe(observeState);
-          return {
-            unsubscribe
-          };
-        }
-      }, _ref[$$observable] = function() {
-        return this;
-      }, _ref;
-    }
-    dispatch2({
-      type: ActionTypes.INIT
-    });
-    return _ref2 = {
-      dispatch: dispatch2,
-      subscribe,
-      getState,
-      replaceReducer
-    }, _ref2[$$observable] = observable, _ref2;
+    };
+    return middleware;
   }
-  function warning3(message) {
-    if (typeof console !== "undefined" && typeof console.error === "function") {
-      console.error(message);
-    }
-    try {
-      throw new Error(message);
-    } catch (e) {
-    }
-  }
-  function isCrushed() {
-  }
-  if (typeof isCrushed.name === "string" && isCrushed.name !== "isCrushed") {
-    warning3('You are currently using minified code outside of NODE_ENV === "production". This means that you are running a slower development build of Redux. You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) to ensure you have the correct code for your production build.');
-  }
+  var thunk = createThunkMiddleware();
+  thunk.withExtraArgument = createThunkMiddleware;
+  var es_default = thunk;
 
   // app/javascript/configureStore.js
   var initialState = {
@@ -26738,12 +27014,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   rootReducer = (state = initialState, action) => {
     console.log(action.type, "request");
     switch (action.type) {
+      case "GET_RANDOM_MSG_SUCCSESS":
+        return { msg: action.json };
       default:
         return state;
     }
   };
   var configureStore_default = configureStore = () => {
-    const store2 = createStore(rootReducer, initialState);
+    const store2 = (0, import_redux.createStore)(rootReducer, initialState, (0, import_redux_devtools_extension.composeWithDevTools)((0, import_redux.applyMiddleware)(es_default)));
     return store2;
   };
 
