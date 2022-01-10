@@ -5,7 +5,7 @@ module Api
         prng = Random.new
         ran_num = prng.rand(Message.count)
         ran_msg = Message.all[ran_num]
-        render html: ran_msg.title
+        render json: ran_msg
       end
     end
   end
