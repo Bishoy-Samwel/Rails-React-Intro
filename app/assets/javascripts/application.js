@@ -26624,9 +26624,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, [location2, navigate, path, replaceProp, state, target, to]);
   }
 
-  // app/javascript/components/message.jsx
-  var import_react10 = __toESM(require_react());
-
   // node_modules/react-redux/es/components/Provider.js
   var import_react5 = __toESM(require_react());
   var import_prop_types = __toESM(require_prop_types());
@@ -26959,29 +26956,28 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   setBatch(import_react_dom.unstable_batchedUpdates);
 
   // app/javascript/components/message.jsx
+  var import_react10 = __toESM(require_react());
   var GET_RANDOM_MSG_REQUEST = "GET_RANDOM_MSG_REQUEST";
   var GET_RANDOM_MSG_SUCCSESS = "GET_RANDOM_MSG_SUCCSESS";
-  getRandomMsg = () => {
-    return (dispacth) => {
-      dispacth({ type: GET_RANDOM_MSG_REQUEST });
-      return fetch(`api/v1/randomMessage`).then((response) => response.json()).then((json) => dispacth(getRandomMsgSuccess(json))).catch((error) => console.log(error));
-    };
-  };
-  getRandomMsgSuccess = (json) => {
+  var getRandomMsgSuccess = (json) => {
     console.log("GetRandomMsg() Action");
     return {
       type: GET_RANDOM_MSG_SUCCSESS,
       json
     };
   };
+  var getRandomMsg = () => (dispacth) => {
+    dispacth({ type: GET_RANDOM_MSG_REQUEST });
+    return fetch("api/v1/randomMessage").then((response) => response.json()).then((json) => dispacth(getRandomMsgSuccess(json))).catch((error) => console.log(error));
+  };
   function Message(props) {
     const { msg } = props;
     const dispatch2 = useDispatch();
     const message = useSelector((state) => state.msg);
-    return /* @__PURE__ */ import_react10.default.createElement("div", null, /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from props is ", msg, "."), /* @__PURE__ */ import_react10.default.createElement("button", {
+    return /* @__PURE__ */ import_react10.default.createElement("div", null, /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from props is ", msg), /* @__PURE__ */ import_react10.default.createElement("button", {
       className: "getMessageBtn",
       onClick: () => dispatch2(getRandomMsg())
-    }, " Get Random Message"), /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from store is ", message.title, "."));
+    }, " Get Random Message"), /* @__PURE__ */ import_react10.default.createElement("h2", null, "The Message from store is", " ", message.title, "."));
   }
 
   // app/javascript/configureStore.js
@@ -27011,7 +27007,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var initialState = {
     msg: { title: "Hello", body: "English Message" }
   };
-  rootReducer = (state = initialState, action) => {
+  var rootReducer = (state = initialState, action) => {
     console.log(action.type, "request");
     switch (action.type) {
       case "GET_RANDOM_MSG_SUCCSESS":
@@ -27020,21 +27016,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return state;
     }
   };
-  var configureStore_default = configureStore = () => {
+  var configureStore = () => {
     const store2 = (0, import_redux.createStore)(rootReducer, initialState, (0, import_redux_devtools_extension.composeWithDevTools)((0, import_redux.applyMiddleware)(es_default)));
     return store2;
   };
+  var configureStore_default = configureStore;
 
   // app/javascript/components/App.jsx
   var store = configureStore_default();
   function App() {
     return /* @__PURE__ */ import_react11.default.createElement(Provider_default, {
       store
-    }, /* @__PURE__ */ import_react11.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react11.default.createElement("div", null, /* @__PURE__ */ import_react11.default.createElement("nav", null, /* @__PURE__ */ import_react11.default.createElement("ul", null, /* @__PURE__ */ import_react11.default.createElement("li", null, " ", /* @__PURE__ */ import_react11.default.createElement(Link, {
+    }, /* @__PURE__ */ import_react11.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react11.default.createElement("div", null, /* @__PURE__ */ import_react11.default.createElement("nav", null, /* @__PURE__ */ import_react11.default.createElement("ul", null, /* @__PURE__ */ import_react11.default.createElement("li", null, /* @__PURE__ */ import_react11.default.createElement(Link, {
       to: "/"
-    }, "Home")), /* @__PURE__ */ import_react11.default.createElement("li", null, " ", /* @__PURE__ */ import_react11.default.createElement(Link, {
+    }, "Home")), /* @__PURE__ */ import_react11.default.createElement("li", null, /* @__PURE__ */ import_react11.default.createElement(Link, {
       to: "/randomMessage"
-    }, "Random Message"), " "))), /* @__PURE__ */ import_react11.default.createElement(Routes, null, /* @__PURE__ */ import_react11.default.createElement(Route, {
+    }, "Random Message")))), /* @__PURE__ */ import_react11.default.createElement(Routes, null, /* @__PURE__ */ import_react11.default.createElement(Route, {
       path: "/",
       element: /* @__PURE__ */ import_react11.default.createElement(Home, null)
     }), /* @__PURE__ */ import_react11.default.createElement(Route, {

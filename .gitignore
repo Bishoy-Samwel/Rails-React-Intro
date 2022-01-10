@@ -6,6 +6,8 @@
 
 node_modules
 
+app/assets/javascripts
+
 # Ignore bundler config.
 /.bundle
 

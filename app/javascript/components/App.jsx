@@ -1,35 +1,40 @@
 import ReactDOM from 'react-dom';
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Link,
-  Routes
-} from "react-router-dom";
+  Routes,
+} from 'react-router-dom';
 
-import Message from './message.jsx'
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
+import Message from './message.jsx';
 import configureStore from '../configureStore.js';
+
 const store = configureStore();
 
 export default function App() {
   return (
-    <Provider store={store}> 
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li> <Link to="/">Home</Link></li>
-            <li> <Link to="/randomMessage">Random Message</Link> </li>
-          </ul>
-        </nav>
+    <Provider store={store}>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/randomMessage">Random Message</Link>
+              </li>
+            </ul>
+          </nav>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/randomMessage" element={<Message msg="hi" />} />
-        </Routes>
-      </div>
-    </Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/randomMessage" element={<Message msg="hi" />} />
+          </Routes>
+        </div>
+      </Router>
     </Provider>
   );
 }
@@ -38,8 +43,7 @@ function Home() {
   return <h2>Home</h2>;
 }
 
-
 ReactDOM.render(
   <App />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
